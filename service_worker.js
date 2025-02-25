@@ -1,3 +1,4 @@
+//Installs website to your phone
 self.addEventListener("install", (event) => {
     console.log("Service Worker Installed");
 });

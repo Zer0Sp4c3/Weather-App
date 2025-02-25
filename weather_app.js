@@ -103,11 +103,11 @@ async function fetchWeather(objLatitude, objLongitude) {
         const weatherResponse = await fetch(weatherUrl);
         const weatherData = await weatherResponse.json();
         
-        console.log("Weather API Response:", weatherData); // ✅ Debugging
+        console.log("Weather API Response:", weatherData); // Debugging
 
         if (weatherData.current_weather && weatherData.hourly) {
             // Extract latest precipitation value
-            const precipitation = weatherData.hourly.precipitation[0] ?? "N/A";
+            const precipitation = weatherData.hourly.precipitation[0] ?? "N/A"; // Gets precipitation
             displayWeather(weatherData.current_weather, precipitation);
         } else {
             console.error("Error: Weather data is missing.");
@@ -138,6 +138,7 @@ async function displayWeather(objWeatherData, precipitation) {
     console.log("Displaying weather:", objWeatherData, "Precipitation:", precipitation); // Debugging
 }
 
+//Gets service_worker.js to work
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js")
     .then(() => console.log("Service Worker Registered"))
