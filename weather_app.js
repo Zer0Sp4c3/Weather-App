@@ -111,6 +111,7 @@ async function displayWeather(objWeatherData, precipitation) {
     const weatherCondition = weatherDescriptions[objWeatherData.weathercode] || "Unknown";
 
     weatherContainer.innerHTML = `
+        <p>Dispying Weather Info:</p>
         <h1 class="text-danger">🌡️ Temperature: ${objWeatherData.temperature}°F</h1>
         <h1 class="text-info">🌧️ Precipitation: ${precipitation}%</h1>
         <h1 class="text-secondary">⛅ Condition: ${weatherCondition}</h1>
@@ -127,19 +128,21 @@ if ("serviceWorker" in navigator) {
     .catch(error => console.log("Service Worker Registration Failed:", error));
 }
 
-document.querySelector('#btnGetLocation').addEventListener('click', function(){
-    getCoordinatesFromCity();
-    document.querySelector('#frmLocation').style.display = 'none'
-    document.querySelector('#frmWeather').style.display = 'block'
-})
+$(document).ready(function() {
+    $('#btnGetLocation').click(function() {
+        getCoordinatesFromCity();
+        $('#frmLocation').slideUp();
+        $('#frmWeather').slideDown();
+    });
 
-document.querySelector('#btnSubmit').addEventListener('click', function(){
-    getLocationByCoord();
-    document.querySelector('#frmLocation').style.display = 'none'
-    document.querySelector('#frmWeather').style.display = 'block'
-})
+    $('#btnSubmit').click(function() {
+        getLocationByCoord();
+        $('#frmLocation').slideUp();
+        $('#frmWeather').slideDown();
+    });
 
-document.querySelector('#btnBack').addEventListener('click', function(){
-    document.querySelector('#frmLocation').style.display = 'block'
-    document.querySelector('#frmWeather').style.display = 'none'
-})
+    $('#btnBack').click(function() {
+        $('#frmWeather').slideUp();
+        $('#frmLocation').slideDown();
+    });
+});
