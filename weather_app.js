@@ -39,29 +39,11 @@ async function getLocationByCoord() {
             },
 )}}
 
-// Function will obtain IP address to get geolocation
-// async function getLocationByIP() {
-//     fetch(`http://ip-api.com/json/`) // API that uses IP to get location
-//         .then(objResponse => objResponse.json())
-//         .then(objData => {
-//             const { lat, lon } = objData;
-//             fetchWeather(lat, lon);
-//         })
-//         .catch(error => console.error("Error fetching IP location:", error));
-// }
-
 // Function that allows users to input their city and state and obtain geolocation
 async function getCoordinatesFromCity() {
     // Pulls input for city and state
-    // const city = document.querySelector('#txtCity').value;
-    // const state = document.querySelector('#txtState').value;
     const address = document.querySelector('#txtAddress').value;
     const encodedAddress = encodeURIComponent(address + ' United States');
-    
-    // if (!city || !state) {
-    //     alert("Please enter a city name and state.");
-    //     return;
-    // }
 
     const geoUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodedAddress}&key=127ec4374fe142b3a13be55b09a8a249`;
     console.log("Requesting:", geoUrl);
@@ -144,14 +126,6 @@ if ("serviceWorker" in navigator) {
     .then(() => console.log("Service Worker Registered"))
     .catch(error => console.log("Service Worker Registration Failed:", error));
 }
-
-// document.querySelector('#btnLocation').addEventListener('click', function(){
-//     getLocationByCoord();
-// })
-
-// document.querySelector('#btnApproximation').addEventListener('click', function(){
-//     getLocationByIP();
-// })
 
 document.querySelector('#btnGetLocation').addEventListener('click', function(){
     getCoordinatesFromCity();
