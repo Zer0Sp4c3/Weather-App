@@ -82,18 +82,27 @@ async function fetchWeather(objLatitude, objLongitude) {
     console.log("Fetching weather for:", objLatitude, objLongitude);
 
     try {
-        const weatherResponse = await fetch(weatherUrl);
-        const weatherData = await weatherResponse.json();
-        
-        console.log("Weather API Response:", weatherData); // Debugging
+        fetch(weatherUrl)
+        .then(response => response.json())
+        .then(data => {
+            // Extract the array of hourly timestamps (e.g., ["2025-07-07T00:00", "2025-07-07T01:00", ...])
+            const times = data.hourly.time;
 
-        if (weatherData.current_weather && weatherData.hourly) {
-            // Extract latest precipitation value
-            const precipitation = weatherData.hourly.precipitation[0] ?? "N/A"; // Gets precipitation
-            displayWeather(weatherData.current_weather, precipitation);
-        } else {
-            console.error("Error: Weather data is missing.");
-        }
+            // Extract the array of corresponding precipitation probabilities (e.g., [10, 20, 0, ...])
+            const probabilities = data.hourly.precipitation_probability;
+
+            // Get the current date and hour in ISO format like "2025-07-07T14"
+            // slice(0, 13) keeps only the year-month-day and hour portion (removes minutes and seconds)
+            const now = new Date().toISOString().slice(0, 13);
+
+            // Find the index of the current hour in the `times` array
+            // This tells us which position in the array matches the current hour
+            const index = times.findIndex(t => t.startsWith(now));
+
+            //Call displayWeather
+            displayWeather(data.current_weather, probabilities[index]);
+        });
+
     } catch (error) {
         console.error("Error fetching weather data:", error);
     }
