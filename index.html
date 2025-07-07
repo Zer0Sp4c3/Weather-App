@@ -14,6 +14,9 @@
             <h1 class="text-center mb-0 text-primary">Perrin's Weather Service (United States)</h1>
             <h3 class="text-center mb-2">Notice: We will use your location to access weather info</h3>
 
+            <label for="txtAddress" class="form-label">Enter your full address (Street Address, City, State Name)</label>
+            <input id="txtAddress" class="form-control mt-2" type="text" placeholder="City" aria-label="input for adress">
+
             <!-- <input id="txtCity" class="form-control mt-2" type="text" placeholder="City" aria-label="input for city">
                 <select id="cboState" class="form-control mt-2" placeholder="Choose your state" aria-label="Choose your state">
                     <option value="">Choose your state</option>
@@ -68,7 +71,8 @@
                     <option value="WI">Wisconsin</option>
                     <option value="WY">Wyoming</option>
                 </select> -->
-                <button class="btn btn-primary col-sm-12 mt-4" type="button" id="btnSubmit" aria-label="Submit button">Get Started</button>
+                <button class="btn btn-secondary mt-2" type="button" id="btnGetLocation" aria-label="Get location button">Use my City</button>
+                <button class="btn btn-primary col-sm-12 mt-4" type="button" id="btnSubmit" aria-label="Submit button">Use my Location</button>
         </form>
 
         <form class="card col-12 col-md-5 col-lg-4" id="frmWeather" style="display: none;">

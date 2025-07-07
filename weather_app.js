@@ -51,51 +51,51 @@ async function getLocationByCoord() {
 // }
 
 // Function that allows users to input their city and state and obtain geolocation
-// async function getCoordinatesFromCity() {
-//     // Pulls input for city and state
-//     const city = document.querySelector('#txtCity').value;
-//     const state = document.querySelector('#cboState').value;
+async function getCoordinatesFromCity() {
+    // Pulls input for city and state
+    // const city = document.querySelector('#txtCity').value;
+    // const state = document.querySelector('#txtState').value;
+    const address = document.querySelector('#txtAddress').value;
+    const encodedAddress = encodeURIComponent(address + ' United States');
     
-//     // if (!city || !state) {
-//     //     alert("Please enter a city name and state.");
-//     //     return;
-//     // }
+    // if (!city || !state) {
+    //     alert("Please enter a city name and state.");
+    //     return;
+    // }
 
-//     const geoUrl = `https://api.opencagedata.com/geocode/v1/json?q=${city},${state},USA&key=2df30d3ed3be46baa0415d5c48491068`;
-//     console.log("Fetching geolocation for:", city, state);
-//     console.log("Requesting:", geoUrl);
+    const geoUrl = `https://api.opencagedata.com/geocode/v1/json?q=${encodedAddress}&key=127ec4374fe142b3a13be55b09a8a249`;
+    console.log("Requesting:", geoUrl);
     
-//     try {
-//         const geoResponse = await fetch(geoUrl); // Fetch latitude and longitude from Open-Meteo Geocoding API
-//         const geoData = await geoResponse.json(); // Turn the response into a JSON file
-//         console.log(geoData)
-//         // Check if geoData is a valid array before accessing properties
-//         if (!Array.isArray(geoData) || geoData.length === 0) {
-//             alert("Invalid city or state. Please enter a valid location.");
-//             return;
-//         }
+    try {
+        fetch(geoUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.results && data.results.length > 0) {
+            const { lat, lng } = data.results[0].geometry;
+            console.log('Latitude:', lat);
+            console.log('Longitude:', lng);
 
-//         const { latitude, longitude } = geoData.results[0];
-        
-//         if (!latitude || !longitude) {
-//             console.error("Error: Latitude or Longitude not found in response.");
-//             alert("Error retrieving location coordinates.");
-//             return;
-//         }
+            // Call the weather function with the obtained coordinates
+            fetchWeather(lat, lng);
 
-//         fetchWeather(latitude, longitude);
-//         console.log(latitude, longitude)
+            } else {
+            console.error('No results found for that address.');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching geolocation:', error);
+        });
 
-//     }
-//     catch (error) {
-//         console.error("Error fetching weather data:", error);
-//     }
-// }
+    }
+    catch (error) {
+        console.error("Error fetching weather data:", error);
+    }
+}
 
 
 // Function fetches and makes API call to obtain weather info
 async function fetchWeather(objLatitude, objLongitude) {
-    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${objLatitude}&longitude=${objLongitude}&current_weather=true&temperature_unit=fahrenheit&precipitation_unit=inch&hourly=precipitation&forecast_days=1`;
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${objLatitude}&longitude=${objLongitude}&current_weather=true&temperature_unit=fahrenheit&precipitation_unit=inch&hourly=precipitation,precipitation_probability&forecast_days=1`;
 
     console.log("Fetching weather for:", objLatitude, objLongitude);
 
@@ -130,7 +130,7 @@ async function displayWeather(objWeatherData, precipitation) {
 
     weatherContainer.innerHTML = `
         <p>🌡️ Temperature: ${objWeatherData.temperature}°F</p>
-        <p>🌧️ Precipitation: ${precipitation} inches</p>
+        <p>🌧️ Precipitation: ${precipitation}%</p>
         <p>⛅ Condition: ${weatherCondition}</p>
 
     `;
@@ -152,6 +152,12 @@ if ("serviceWorker" in navigator) {
 // document.querySelector('#btnApproximation').addEventListener('click', function(){
 //     getLocationByIP();
 // })
+
+document.querySelector('#btnGetLocation').addEventListener('click', function(){
+    getCoordinatesFromCity();
+    document.querySelector('#frmLocation').style.display = 'none'
+    document.querySelector('#frmWeather').style.display = 'block'
+})
 
 document.querySelector('#btnSubmit').addEventListener('click', function(){
     getLocationByCoord();
